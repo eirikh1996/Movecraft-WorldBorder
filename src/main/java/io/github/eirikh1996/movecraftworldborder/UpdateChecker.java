@@ -66,10 +66,10 @@ public class UpdateChecker extends BukkitRunnable {
 
     public double checkUpdate(double currentVersion){
         try {
-            URL url = new URL("https://servermods.forgesvc.net/servermods/files?projectids=342136");
+            URL url = new URL("https://servermods.forgesvc.net/servermods/files?projectids=342391");
             URLConnection conn = url.openConnection();
             conn.setReadTimeout(5000);
-            conn.addRequestProperty("User-Agent", "Movecraft-Factions Update Checker");
+            conn.addRequestProperty("User-Agent", "Movecraft-WorldBorder Update Checker");
             conn.setDoOutput(true);
             final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             final String response = reader.readLine();
