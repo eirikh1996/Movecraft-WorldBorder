@@ -1,0 +1,7 @@
+name: Movecraft-WorldBorder
+main: io.github.eirikh1996.movecraftworldborder.MWBMain
+version: 1.0
+author: eirikh1996
+softdepend:
+  - Movecraft
+  - WorldBorder
