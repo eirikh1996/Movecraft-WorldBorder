@@ -70,6 +70,9 @@ public class MWBMain extends JavaPlugin implements Listener {
     public void onCraftTranslate(CraftTranslateEvent event){
         World world = event.getCraft().getW();
         BorderData data = worldBorderPlugin.getWorldBorder(world.getName());
+        if (data == null){
+            return;
+        }
         for (MovecraftLocation ml : event.getNewHitBox()){
             if (event.getOldHitBox().contains(ml)){
                 continue;
@@ -87,6 +90,9 @@ public class MWBMain extends JavaPlugin implements Listener {
     public void onCraftRotate(CraftRotateEvent event){
         World world = event.getCraft().getW();
         BorderData data = Config.Border(world.getName());
+        if (data == null){
+            return;
+        }
         for (MovecraftLocation ml : event.getNewHitBox()){
             if (event.getOldHitBox().contains(ml)){
                 continue;

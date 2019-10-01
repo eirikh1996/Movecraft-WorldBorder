@@ -55,6 +55,9 @@ public class UpdateChecker extends BukkitRunnable {
     public void sendUpdateMessage(Player player){
         if (!player.hasPermission("mwb.update"))
             return;
+        if (checkUpdate(getCurrentVersion()) <= getCurrentVersion()){
+            return;
+        }
         player.sendMessage(String.format("A new update of Movecraft-WorldBorder (v%f) is available.", checkUpdate(getCurrentVersion())));
         player.sendMessage(String.format("You are currently on v%f", getCurrentVersion()));
         player.sendMessage("Download at: ");
