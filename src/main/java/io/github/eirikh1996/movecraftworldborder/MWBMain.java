@@ -15,10 +15,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class MWBMain extends JavaPlugin implements Listener {
     private static MWBMain instance;
     private Movecraft movecraftPlugin;
     private WorldBorder worldBorderPlugin;
+    private Method GET_WORLD;
 
     @Override
     public void onLoad() {
@@ -40,7 +44,11 @@ public class MWBMain extends JavaPlugin implements Listener {
             getLogger().info(I18nSupport.getInternationalizedString("Startup - Movecraft found"));
             movecraftPlugin = (Movecraft) movecraft;
         }
-
+        try {
+            GET_WORLD = CraftTranslateEvent.class.getDeclaredMethod("getWorld");
+        } catch (NoSuchMethodException e) {
+            GET_WORLD = null;
+        }
         //worldborder
         Plugin wb = getServer().getPluginManager().getPlugin("WorldBorder");
         if (wb instanceof WorldBorder){
@@ -69,6 +77,13 @@ public class MWBMain extends JavaPlugin implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCraftTranslate(CraftTranslateEvent event){
         World world = event.getCraft().getW();
+        if (GET_WORLD != null) {
+            try {
+                world = (World) GET_WORLD.invoke(event);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
         BorderData data = worldBorderPlugin.getWorldBorder(world.getName());
         if (data == null){
             return;
