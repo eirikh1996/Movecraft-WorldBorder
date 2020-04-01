@@ -82,6 +82,7 @@ public class MWBMain extends JavaPlugin implements Listener {
                 world = (World) GET_WORLD.invoke(event);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
+                world = event.getCraft().getW();
             }
         }
         BorderData data = worldBorderPlugin.getWorldBorder(world.getName());
@@ -119,11 +120,6 @@ public class MWBMain extends JavaPlugin implements Listener {
             event.setCancelled(true);
             break;
         }
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event){
-        UpdateChecker.getInstance().sendUpdateMessage(event.getPlayer());
     }
 
     public static MWBMain getInstance() {

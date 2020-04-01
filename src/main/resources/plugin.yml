@@ -2,6 +2,6 @@ name: Movecraft-WorldBorder
 main: io.github.eirikh1996.movecraftworldborder.MWBMain
 version: ${project.version}
 author: eirikh1996
-softdepend:
+depend:
   - Movecraft
   - WorldBorder
