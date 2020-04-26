@@ -7,6 +7,7 @@ import net.countercraft.movecraft.Movecraft;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.events.CraftRotateEvent;
 import net.countercraft.movecraft.events.CraftTranslateEvent;
+import net.countercraft.movecraft.utils.HitBox;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -89,7 +90,14 @@ public class MWBMain extends JavaPlugin implements Listener {
         if (data == null){
             return;
         }
-        for (MovecraftLocation ml : event.getNewHitBox()){
+        final HitBox newHitBox;
+        try {
+            Method getNewHitBox = CraftTranslateEvent.class.getDeclaredMethod("getNewHitBox");
+            newHitBox = (HitBox) getNewHitBox.invoke(event);
+        } catch (Exception e) {
+            return;
+        }
+        for (MovecraftLocation ml : newHitBox){
             if (event.getOldHitBox().contains(ml)){
                 continue;
             }
@@ -109,7 +117,14 @@ public class MWBMain extends JavaPlugin implements Listener {
         if (data == null){
             return;
         }
-        for (MovecraftLocation ml : event.getNewHitBox()){
+        final HitBox newHitBox;
+        try {
+            Method getNewHitBox = CraftRotateEvent.class.getDeclaredMethod("getNewHitBox");
+            newHitBox = (HitBox) getNewHitBox.invoke(event);
+        } catch (Exception e) {
+            return;
+        }
+        for (MovecraftLocation ml : newHitBox){
             if (event.getOldHitBox().contains(ml)){
                 continue;
             }
