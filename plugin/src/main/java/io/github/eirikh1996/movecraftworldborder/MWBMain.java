@@ -3,6 +3,8 @@ package io.github.eirikh1996.movecraftworldborder;
 import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
 import com.wimbli.WorldBorder.WorldBorder;
+import io.github.eirikh1996.movecraftworldborder.movecraft7.Movecraft7Handler;
+import io.github.eirikh1996.movecraftworldborder.movecraft8.Movecraft8Handler;
 import net.countercraft.movecraft.Movecraft;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.events.CraftRotateEvent;
@@ -23,7 +25,6 @@ public class MWBMain extends JavaPlugin implements Listener {
     private static MWBMain instance;
     private Movecraft movecraftPlugin;
     private WorldBorder worldBorderPlugin;
-    private Method GET_WORLD;
 
     @Override
     public void onLoad() {
@@ -36,19 +37,16 @@ public class MWBMain extends JavaPlugin implements Listener {
         UpdateChecker.initialize();
         MWBMain.getInstance().saveResource("localisation/mwblang_en.properties", false);
         Settings.locale = getConfig().getString("locale", "en");
-        if (!I18nSupport.initialize()){
+        if (!I18nSupport.initialize(this)){
             return;
         }
         Plugin movecraft = getServer().getPluginManager().getPlugin("Movecraft");
         //Load up Movecraft
+        boolean movecraft8 = false;
         if (movecraft instanceof Movecraft){
             getLogger().info(I18nSupport.getInternationalizedString("Startup - Movecraft found"));
             movecraftPlugin = (Movecraft) movecraft;
-        }
-        try {
-            GET_WORLD = CraftTranslateEvent.class.getDeclaredMethod("getWorld");
-        } catch (NoSuchMethodException e) {
-            GET_WORLD = null;
+            getLogger().info(I18nSupport.getInternationalizedString("Startup - Movecraft detected") + " " + movecraftPlugin.getDescription().getVersion());
         }
         //worldborder
         Plugin wb = getServer().getPluginManager().getPlugin("WorldBorder");
@@ -70,72 +68,19 @@ public class MWBMain extends JavaPlugin implements Listener {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        getServer().getPluginManager().registerEvents(this, this);
+        Listener listener;
+        try {
+            Class.forName("net.countercraft.movecraft.craft.BaseCraft");
+            listener = new Movecraft8Handler(worldBorderPlugin);
+        } catch (ClassNotFoundException e) {
+            listener = new Movecraft7Handler(worldBorderPlugin);
+        }
+        getServer().getPluginManager().registerEvents(listener, this);
         UpdateChecker.getInstance().start();
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCraftTranslate(CraftTranslateEvent event){
-        World world = event.getCraft().getW();
-        if (GET_WORLD != null) {
-            try {
-                world = (World) GET_WORLD.invoke(event);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-                world = event.getCraft().getW();
-            }
-        }
-        BorderData data = worldBorderPlugin.getWorldBorder(world.getName());
-        if (data == null){
-            return;
-        }
-        final HitBox newHitBox;
-        try {
-            Method getNewHitBox = CraftTranslateEvent.class.getDeclaredMethod("getNewHitBox");
-            newHitBox = (HitBox) getNewHitBox.invoke(event);
-        } catch (Exception e) {
-            return;
-        }
-        for (MovecraftLocation ml : newHitBox){
-            if (event.getOldHitBox().contains(ml)){
-                continue;
-            }
-            if (data.insideBorder(ml.toBukkit(world))){
-                continue;
-            }
-            event.setFailMessage(I18nSupport.getInternationalizedString("Translation - Can't go past world border"));
-            event.setCancelled(true);
-            break;
-        }
-    }
 
-    @EventHandler
-    public void onCraftRotate(CraftRotateEvent event){
-        World world = event.getCraft().getW();
-        BorderData data = Config.Border(world.getName());
-        if (data == null){
-            return;
-        }
-        final HitBox newHitBox;
-        try {
-            Method getNewHitBox = CraftRotateEvent.class.getDeclaredMethod("getNewHitBox");
-            newHitBox = (HitBox) getNewHitBox.invoke(event);
-        } catch (Exception e) {
-            return;
-        }
-        for (MovecraftLocation ml : newHitBox){
-            if (event.getOldHitBox().contains(ml)){
-                continue;
-            }
-            if (data.insideBorder(ml.toBukkit(world))){
-                continue;
-            }
-            event.setFailMessage(I18nSupport.getInternationalizedString("Rotation - Can't go past world border"));
-            event.setCancelled(true);
-            break;
-        }
-    }
 
     public static MWBMain getInstance() {
         return instance;

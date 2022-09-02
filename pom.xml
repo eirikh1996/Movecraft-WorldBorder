@@ -5,8 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.eirikh1996</groupId>
-    <artifactId>Movecraft-WorldBorder</artifactId>
-    <version>1.3</version>
+    <artifactId>movecraft-worldborder-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>Parent</version>
+    <modules>
+        <module>api</module>
+        <module>movecraft7</module>
+        <module>movecraft8</module>
+        <module>plugin</module>
+    </modules>
     <repositories>
         <repository>
             <id>spigot-repo</id>
@@ -15,43 +22,11 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.wimbli</groupId>
-            <artifactId>WorldBorder</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/WorldBorder.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>net.countercraft</groupId>
-            <artifactId>Movecraft</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/Movecraft.jar</systemPath>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.19.2-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    <build>
-        <finalName>Movecraft-WorldBorder</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
 
 </project>

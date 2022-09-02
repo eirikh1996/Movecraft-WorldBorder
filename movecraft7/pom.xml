@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>movecraft-worldborder-parent</artifactId>
+        <groupId>io.github.eirikh1996</groupId>
+        <version>Parent</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>movecraft-worldborder-movecraft7</artifactId>
+    <name>Movecraft-Worldborder-Movecraft7</name>
+    <version>Movecraft7</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.eirikh1996</groupId>
+            <artifactId>movecraft-worldborder-api</artifactId>
+            <version>API</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.wimbli</groupId>
+            <artifactId>WorldBorder</artifactId>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../libs/WorldBorder.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net.countercraft</groupId>
+            <artifactId>Movecraft</artifactId>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../libs/Movecraft7.jar</systemPath>
+        </dependency>
+    </dependencies>
+</project>
